@@ -7,10 +7,10 @@ import com.example.movieapi.model.MovieResponseDTO;
 import com.example.movieapi.repository.MovieRepository;
 import com.example.movieapi.repository.MovieSearchSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,9 +21,8 @@ public class MovieServiceImpl implements MoveService{
     private final MovieMapper movieMapper;
 
     @Override
-    public List<MovieResponseDTO> getAllMovies() {
-        return movieRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
-                .stream().map(movieMapper::toResponseDTO).toList();
+    public Page<MovieResponseDTO> getAllMovies(Pageable pageable) {
+        return movieRepository.findAll(pageable).map(movieMapper::toResponseDTO);
     }
 
     @Override
@@ -60,17 +59,18 @@ public class MovieServiceImpl implements MoveService{
     }
 
     @Override
-    public List<MovieResponseDTO> searchMovies(
+    public Page<MovieResponseDTO> searchMovies(
             String title,
             String genre,
             Integer year,
             String director,
             Double minRating,
-            Double maxRating
+            Double maxRating,
+            Pageable pageable
     ) {
         return movieRepository.findAll(
                         MovieSearchSpecification.search(title, genre, year, director, minRating, maxRating),
-                        Sort.by(Sort.Direction.ASC, "id"))
-                .stream().map(movieMapper::toResponseDTO).toList();
+                        pageable)
+                .map(movieMapper::toResponseDTO);
     }
 }

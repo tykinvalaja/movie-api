@@ -2,12 +2,14 @@ package com.example.movieapi.service;
 
 import com.example.movieapi.model.MovieRequestDTO;
 import com.example.movieapi.model.MovieResponseDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface MoveService {
-    List<MovieResponseDTO> getAllMovies();
+    Page<MovieResponseDTO> getAllMovies(Pageable pageable);
 
     Optional<MovieResponseDTO> getMovie(long id);
 
@@ -17,12 +19,13 @@ public interface MoveService {
 
     void deleteMovie(Long id);
 
-    List<MovieResponseDTO> searchMovies(
+    Page<MovieResponseDTO> searchMovies(
             String title,
             String genre,
             Integer year,
             String director,
             Double minRating,
-            Double maxRating
+            Double maxRating,
+            Pageable pageable
     );
 }

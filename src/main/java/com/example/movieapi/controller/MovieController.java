@@ -12,6 +12,10 @@ import com.example.movieapi.model.MovieRequestDTO;
 import com.example.movieapi.model.MovieResponseDTO;
 import com.example.movieapi.service.MovieServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +38,15 @@ public class MovieController {
             summary = "Get all movies",
             responses = @ApiResponse(responseCode = "200", description = "Movies returned")
     )
-    public ResponseEntity<List<MovieResponseDTO>> getMovies() {
-        return ResponseEntity.ok(movieService.getAllMovies());
+    public ResponseEntity<Page<MovieResponseDTO>> getMovies(@RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size,
+                                                            @RequestParam(defaultValue = "title") String sortBy,
+                                                            @RequestParam(defaultValue = "asc") String direction) {
+        Sort sort = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return ResponseEntity.ok(movieService.getAllMovies(pageable));
     }
 
     @GetMapping("/{id}")
@@ -62,7 +73,7 @@ public class MovieController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = MovieResponseDTO.class)))
             )
     )
-    public ResponseEntity<List<MovieResponseDTO>> searchMovie(
+    public ResponseEntity<Page<MovieResponseDTO>> searchMovie(
             @Parameter(description = "Title contains (case-insensitive)", example = "matrix")
             @RequestParam(required = false) String title,
             @Parameter(description = "Genre contains (case-insensitive)", example = "sci-fi")
@@ -74,8 +85,16 @@ public class MovieController {
             @Parameter(description = "Minimum rating inclusive", example = "7.5")
             @RequestParam(required = false) Double minRating,
             @Parameter(description = "Maximum rating inclusive", example = "9.0")
-            @RequestParam(required = false) Double maxRating) {
-        return ResponseEntity.ok(movieService.searchMovies(title, genre, releaseYear, director, minRating, maxRating));
+            @RequestParam(required = false) Double maxRating,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "title") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+        Sort sort = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return ResponseEntity.ok(movieService.searchMovies(title, genre, releaseYear, director, minRating, maxRating, pageable));
     }
 
     @PostMapping
