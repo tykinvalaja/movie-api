@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/movie")
+@RequestMapping("/movies")
 public class MovieController {
 
     @GetMapping
@@ -19,8 +19,11 @@ public class MovieController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<String> searchMovie(@RequestParam String title, @RequestParam String genre, @RequestParam String releaseYear,
-                                              @RequestParam String director, @RequestParam String rating) {
+    public ResponseEntity<String> searchMovie(@RequestParam  String title,
+                                              @RequestParam(required = false) String genre,
+                                              @RequestParam(required = false) String releaseYear,
+                                              @RequestParam(required = false) String director,
+                                              @RequestParam(required = false) String rating) {
         return ResponseEntity.ok("Movie");
     }
 

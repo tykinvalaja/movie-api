@@ -1,3 +1,19 @@
 spring:
   application:
     name: movie-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/moviedb
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    schemas: movie_schema
+    create-schemas: true
+    default-schema: movie_schema
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        default_schema: movie_schema
