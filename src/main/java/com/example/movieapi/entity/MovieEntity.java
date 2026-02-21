@@ -1,13 +1,18 @@
-package com.example.movieapi.model;
+package com.example.movieapi.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Movie {
+@NoArgsConstructor
+@Entity
+@Table(name = "movie")
+public class MovieEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
     private String genre;
