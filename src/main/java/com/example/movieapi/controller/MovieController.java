@@ -1,16 +1,23 @@
 package com.example.movieapi.controller;
 
 
+import com.example.movieapi.model.Movie;
+import com.example.movieapi.service.MovieServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/movies")
+@RequiredArgsConstructor
 public class MovieController {
+    private final MovieServiceImpl movieService;
 
     @GetMapping
-    public ResponseEntity<String> getMovies() {
-        return ResponseEntity.ok("Movies");
+    public ResponseEntity<List<Movie>> getMovies() {
+        return ResponseEntity.ok(movieService.getALLMovies());
     }
 
     @GetMapping("/{id}")
