@@ -2,7 +2,8 @@ package com.example.movieapi.service;
 
 import com.example.movieapi.entity.MovieEntity;
 import com.example.movieapi.mapper.MovieMapper;
-import com.example.movieapi.model.Movie;
+import com.example.movieapi.model.MovieRequestDTO;
+import com.example.movieapi.model.MovieResponseDTO;
 import com.example.movieapi.repository.MovieRepository;
 import com.example.movieapi.repository.MovieSearchSpecification;
 import lombok.RequiredArgsConstructor;
@@ -17,25 +18,26 @@ import java.util.Optional;
 public class MovieServiceImpl implements MoveService{
 
     private final MovieRepository movieRepository;
+    private final MovieMapper movieMapper;
 
     @Override
-    public List<Movie> getAllMovies() {
+    public List<MovieResponseDTO> getAllMovies() {
         return movieRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
-                .stream().map(MovieMapper::toDto).toList();
+                .stream().map(movieMapper::toResponseDTO).toList();
     }
 
     @Override
-    public Optional<Movie> getMovie(long id) {
-        return movieRepository.findById(id).map(MovieMapper::toDto);
+    public Optional<MovieResponseDTO> getMovie(long id) {
+        return movieRepository.findById(id).map(movieMapper::toResponseDTO);
     }
 
     @Override
-    public Movie addMovie(Movie movie) {
-        return MovieMapper.toDto(movieRepository.save(MovieMapper.toEntity(movie)));
+    public MovieResponseDTO addMovie(MovieRequestDTO movie) {
+        return movieMapper.toResponseDTO(movieRepository.save(movieMapper.toEntity(movie)));
     }
 
     @Override
-    public Optional<Movie> updateMovie(long id, Movie movie) {
+    public Optional<MovieResponseDTO> updateMovie(long id, MovieRequestDTO movie) {
         Optional<MovieEntity> entity = movieRepository.findById(id);
 
         if (entity.isPresent()) {
@@ -49,7 +51,7 @@ public class MovieServiceImpl implements MoveService{
             entity = Optional.of(movieRepository.save(updatedEntity));
         }
 
-        return entity.map(MovieMapper::toDto);
+        return entity.map(movieMapper::toResponseDTO);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class MovieServiceImpl implements MoveService{
     }
 
     @Override
-    public List<Movie> searchMovies(
+    public List<MovieResponseDTO> searchMovies(
             String title,
             String genre,
             Integer year,
@@ -69,6 +71,6 @@ public class MovieServiceImpl implements MoveService{
         return movieRepository.findAll(
                         MovieSearchSpecification.search(title, genre, year, director, minRating, maxRating),
                         Sort.by(Sort.Direction.ASC, "id"))
-                .stream().map(MovieMapper::toDto).toList();
+                .stream().map(movieMapper::toResponseDTO).toList();
     }
 }

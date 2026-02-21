@@ -1,22 +1,23 @@
 package com.example.movieapi.service;
 
-import com.example.movieapi.model.Movie;
+import com.example.movieapi.model.MovieRequestDTO;
+import com.example.movieapi.model.MovieResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface MoveService {
-    List<Movie> getAllMovies();
+    List<MovieResponseDTO> getAllMovies();
 
-    Optional<Movie> getMovie(long id);
+    Optional<MovieResponseDTO> getMovie(long id);
 
-    Movie addMovie(Movie movie);
+    MovieResponseDTO addMovie(MovieRequestDTO movie);
 
-    Optional<Movie> updateMovie(long id, Movie movie);
+    Optional<MovieResponseDTO> updateMovie(long id, MovieRequestDTO movie);
 
     void deleteMovie(Long id);
 
-    List<Movie> searchMovies(
+    List<MovieResponseDTO> searchMovies(
             String title,
             String genre,
             Integer year,

@@ -1,28 +1,14 @@
 package com.example.movieapi.mapper;
 
 import com.example.movieapi.entity.MovieEntity;
-import com.example.movieapi.model.Movie;
+import com.example.movieapi.model.MovieRequestDTO;
+import com.example.movieapi.model.MovieResponseDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-public class MovieMapper {
-
-    public static Movie toDto(final MovieEntity movieEntity) {
-        return Movie.builder()
-                .id(movieEntity.getId())
-                .title(movieEntity.getTitle())
-                .genre(movieEntity.getGenre())
-                .releaseYear(movieEntity.getReleaseYear())
-                .director(movieEntity.getDirector())
-                .rating(movieEntity.getRating())
-                .build();
-    }
-
-    public static MovieEntity toEntity(final Movie movie) {
-        return MovieEntity.builder()
-                .title(movie.getTitle())
-                .genre(movie.getGenre())
-                .releaseYear(movie.getReleaseYear())
-                .director(movie.getDirector())
-                .rating(movie.getRating())
-                .build();
-    }
+@Mapper(componentModel = "spring")
+public interface MovieMapper {
+    @Mapping(target = "id", ignore = true)
+    MovieEntity toEntity(MovieRequestDTO requestDTO);
+    MovieResponseDTO toResponseDTO(MovieEntity entity);
 }

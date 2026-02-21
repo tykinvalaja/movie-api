@@ -1,7 +1,8 @@
 package com.example.movieapi.controller;
 
 
-import com.example.movieapi.model.Movie;
+import com.example.movieapi.model.MovieRequestDTO;
+import com.example.movieapi.model.MovieResponseDTO;
 import com.example.movieapi.service.MovieServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,17 +22,17 @@ public class MovieController {
     private final MovieServiceImpl movieService;
 
     @GetMapping
-    public ResponseEntity<List<Movie>> getMovies() {
+    public ResponseEntity<List<MovieResponseDTO>> getMovies() {
         return ResponseEntity.ok(movieService.getAllMovies());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovie(@PathVariable long id) {
+    public ResponseEntity<MovieResponseDTO> getMovie(@PathVariable long id) {
         return ResponseEntity.ok(movieService.getMovie(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND)));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Movie>> searchMovie(@RequestParam(required = false) String title,
+    public ResponseEntity<List<MovieResponseDTO>> searchMovie(@RequestParam(required = false) String title,
                                               @RequestParam(required = false) String genre,
                                               @RequestParam(required = false) Integer releaseYear,
                                               @RequestParam(required = false) String director,
@@ -41,12 +42,12 @@ public class MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<Movie> addMovie(Movie movie) {
+    public ResponseEntity<MovieResponseDTO> addMovie(MovieRequestDTO movie) {
         return ResponseEntity.status(CREATED).body(movieService.addMovie(movie));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable long id, @RequestBody Movie movie) {
+    public ResponseEntity<MovieResponseDTO> updateMovie(@PathVariable long id, @RequestBody MovieRequestDTO movie) {
         return ResponseEntity.ok(movieService.updateMovie(id, movie).orElseThrow(() -> new ResponseStatusException(NOT_FOUND)));
     }
 

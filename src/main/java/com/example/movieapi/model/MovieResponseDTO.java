@@ -4,10 +4,9 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Movie {
+public class MovieResponseDTO {
     private long id;
     private String title;
     private String genre;
