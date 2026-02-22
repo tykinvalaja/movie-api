@@ -2,6 +2,18 @@
 
 ![movie-api](https://github.com/tykinvalaja/movie-api/blob/main/documentation/Screenshot%202026-02-22%20at%2011.12.04.png)
 
+# Docker
+
+Dockeria käyttäessä ei tarvita muuta kuin alla olevat komennot.
+
+## Käynnistäminen
+
+`docker-compose up`
+
+## Sammuttaminen
+
+`docker-compose down` tai `docker-compose down -v` poistaaksesi volumet.
+
 # Gradle
 
 Aja komennot projektin kansiosssa komentoriviltä. Gradlella ajaminen olettaa, että käyttäjällä on Postgres-tietokanta ja -tunnukset käytössä. Flyway luo skeeman ja taulut.
@@ -25,18 +37,6 @@ Palvelu käynnistyy osoitteessa https://localhost:8080
 ## Testien ajaminen
 
 `./gradlew test`
-
-# Docker
-
-Dockeria käyttäessä ei tarvita muuta kuin alla olevat komennot; Postgres-tietokanta tulee Docker-imagena, testikäyttöön on valmiiksi asetettu tunnus.
-
-## Käynnistäminen
-
-`docker-compose up`
-
-## Sammuttaminen
-
-`docker-compose down` tai `docker-compose down -v` poistaaksesi volumet.
 
 # Swagger
 
