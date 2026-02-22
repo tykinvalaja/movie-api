@@ -17,8 +17,3 @@ spring:
     properties:
       hibernate:
         default_schema: movie_schema
-
-logging:
-  level:
-    org.flywaydb: DEBUG
-    org.springframework.boot.autoconfigure.flyway: DEBUG
