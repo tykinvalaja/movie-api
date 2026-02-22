@@ -4,7 +4,7 @@
 
 # Gradle
 
-Aja komennot projektin kansiosssa komentoriviltä.
+Aja komennot projektin kansiosssa komentoriviltä. Gradlella ajaminen olettaa, että käyttäjällä on Postgres-tietokanta ja -tunnukset käytössä. Flyway luo skeeman ja taulut.
 
 ## Build
 
@@ -28,7 +28,7 @@ Palvelu käynnistyy osoitteessa https://localhost:8080
 
 # Docker
 
-Docker-käytössä on valmiina testitunnukset tietokantaa varten.
+Dockeria käyttäessä ei tarvita muuta kuin alla olevat komennot; Postgres-tietokanta tulee Docker-imagena, testikäyttöön on valmiiksi asetettu tunnus.
 
 ## Käynnistäminen
 
