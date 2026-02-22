@@ -2,7 +2,7 @@ spring:
   application:
     name: movie-api
   datasource:
-    url: jdbc:postgresql://localhost:5432/moviedb?currentSchema=movie_schema
+    url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver

@@ -1,0 +1,15 @@
+.git
+.gitignore
+.idea
+.gradle
+build
+out
+
+*.iml
+*.log
+
+.DS_Store
+
+README.md
+HELP.md
+documentation

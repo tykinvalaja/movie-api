@@ -1,0 +1,32 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/movie_db
+      SPRING_DATASOURCE_USERNAME: moviebuff
+      SPRING_DATASOURCE_PASSWORD: connoisseur
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: movie_db
+      POSTGRES_USER: moviebuff
+      POSTGRES_PASSWORD: connoisseur
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moviebuff -d movie_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
