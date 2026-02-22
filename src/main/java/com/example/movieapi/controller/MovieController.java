@@ -9,10 +9,10 @@ import com.example.movieapi.model.MovieRequestDTO;
 import com.example.movieapi.model.MovieResponseDTO;
 import com.example.movieapi.service.MovieServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +33,10 @@ public class MovieController {
             summary = "Get all movies",
             responses = @ApiResponse(responseCode = "200", description = "Movies returned")
     )
-    public ResponseEntity<Page<MovieResponseDTO>> getMovies(@RequestParam(defaultValue = "0") int page,
-                                                            @RequestParam(defaultValue = "10") int size,
-                                                            @RequestParam(defaultValue = "title") String sortBy,
-                                                            @RequestParam(defaultValue = "asc") String direction) {
+    public ResponseEntity<PagedModel<MovieResponseDTO>> getMovies(@RequestParam(defaultValue = "0") int page,
+                                                                  @RequestParam(defaultValue = "10") int size,
+                                                                  @RequestParam(defaultValue = "title") String sortBy,
+                                                                  @RequestParam(defaultValue = "asc") String direction) {
         Sort sort = direction.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
@@ -63,7 +63,7 @@ public class MovieController {
             description = "Filter by any combination of title, genre, release year, director and rating range",
             responses = @ApiResponse(responseCode = "200", description = "Matching movies returned")
     )
-    public ResponseEntity<Page<MovieResponseDTO>> searchMovie(
+    public ResponseEntity<PagedModel<MovieResponseDTO>> searchMovie(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String genre,
             @RequestParam(required = false) Integer releaseYear,

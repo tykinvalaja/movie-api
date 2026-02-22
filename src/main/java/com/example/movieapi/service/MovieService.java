@@ -3,13 +3,13 @@ package com.example.movieapi.service;
 import com.example.movieapi.model.MovieRequestDTO;
 import com.example.movieapi.model.MovieResponseDTO;
 import com.example.movieapi.model.MovieReviewDTO;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 
 import java.util.Optional;
 
-public interface MoveService {
-    Page<MovieResponseDTO> getAllMovies(Pageable pageable);
+public interface MovieService {
+    PagedModel<MovieResponseDTO> getAllMovies(Pageable pageable);
 
     Optional<MovieReviewDTO> getMovie(long id);
 
@@ -19,7 +19,7 @@ public interface MoveService {
 
     void deleteMovie(Long id);
 
-    Page<MovieResponseDTO> searchMovies(
+    PagedModel<MovieResponseDTO> searchMovies(
             String title,
             String genre,
             Integer year,

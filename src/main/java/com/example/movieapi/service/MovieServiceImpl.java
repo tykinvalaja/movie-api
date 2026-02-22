@@ -7,25 +7,26 @@ import com.example.movieapi.model.MovieRequestDTO;
 import com.example.movieapi.model.MovieResponseDTO;
 import com.example.movieapi.model.MovieReviewDTO;
 import com.example.movieapi.repository.MovieRepository;
-import com.example.movieapi.repository.MovieSearchSpecification;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MovieServiceImpl implements MoveService{
+public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final ReviewMapper reviewMapper;
 
     @Override
-    public Page<MovieResponseDTO> getAllMovies(Pageable pageable) {
-        return movieRepository.findAll(pageable).map(movieMapper::toResponseDTO);
+    public PagedModel<MovieResponseDTO> getAllMovies(Pageable pageable) {
+        return new PagedModel<>(movieRepository.findAll(pageable).map(movieMapper::toResponseDTO));
     }
 
     @Override
@@ -71,7 +72,7 @@ public class MovieServiceImpl implements MoveService{
     }
 
     @Override
-    public Page<MovieResponseDTO> searchMovies(
+    public PagedModel<MovieResponseDTO> searchMovies(
             String title,
             String genre,
             Integer year,
@@ -80,9 +81,51 @@ public class MovieServiceImpl implements MoveService{
             Double maxRating,
             Pageable pageable
     ) {
-        return movieRepository.findAll(
-                        MovieSearchSpecification.search(title, genre, year, director, minRating, maxRating),
-                        pageable)
-                .map(movieMapper::toResponseDTO);
+        return new PagedModel<>(movieRepository.findAll(getSearchSpecification(title, genre, year, director, minRating, maxRating), pageable)
+                .map(movieMapper::toResponseDTO));
+    }
+
+    private Specification<MovieEntity> getSearchSpecification(String title,
+                                                              String genre,
+                                                              Integer year,
+                                                              String director,
+                                                              Double minRating,
+                                                              Double maxRating) {
+        Specification<MovieEntity> specification = Specification.unrestricted();
+
+        if (title != null && !title.isBlank()) {
+            String normalizedTitle = "%" + title.toLowerCase(Locale.ROOT) + "%";
+            specification = specification.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("title")), normalizedTitle));
+        }
+
+        if (genre != null && !genre.isBlank()) {
+            String normalizedGenre = "%" + genre.toLowerCase(Locale.ROOT) + "%";
+            specification = specification.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("genre")), normalizedGenre));
+        }
+
+        if (year != null) {
+            specification = specification.and((root, query, cb) ->
+                    cb.equal(root.get("releaseYear"), year));
+        }
+
+        if (director != null && !director.isBlank()) {
+            String normalizedDirector = "%" + director.toLowerCase(Locale.ROOT) + "%";
+            specification = specification.and((root, query, cb) ->
+                    cb.like(cb.lower(root.get("director")), normalizedDirector));
+        }
+
+        if (minRating != null) {
+            specification = specification.and((root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("rating"), minRating));
+        }
+
+        if (maxRating != null) {
+            specification = specification.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("rating"), maxRating));
+        }
+
+        return specification;
     }
 }
