@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface MovieMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "reviews", ignore = true)
     MovieEntity toEntity(MovieRequestDTO requestDTO);
     MovieResponseDTO toResponseDTO(MovieEntity entity);
 }

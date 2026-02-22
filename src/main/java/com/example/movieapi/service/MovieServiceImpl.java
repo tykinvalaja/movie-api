@@ -2,8 +2,10 @@ package com.example.movieapi.service;
 
 import com.example.movieapi.entity.MovieEntity;
 import com.example.movieapi.mapper.MovieMapper;
+import com.example.movieapi.mapper.ReviewMapper;
 import com.example.movieapi.model.MovieRequestDTO;
 import com.example.movieapi.model.MovieResponseDTO;
+import com.example.movieapi.model.MovieReviewDTO;
 import com.example.movieapi.repository.MovieRepository;
 import com.example.movieapi.repository.MovieSearchSpecification;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class MovieServiceImpl implements MoveService{
 
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
+    private final ReviewMapper reviewMapper;
 
     @Override
     public Page<MovieResponseDTO> getAllMovies(Pageable pageable) {
@@ -26,8 +29,17 @@ public class MovieServiceImpl implements MoveService{
     }
 
     @Override
-    public Optional<MovieResponseDTO> getMovie(long id) {
-        return movieRepository.findById(id).map(movieMapper::toResponseDTO);
+    public Optional<MovieReviewDTO> getMovie(long id) {
+        Optional<MovieEntity> entity = movieRepository.findById(id);
+        MovieReviewDTO movieReviewDTO = new MovieReviewDTO();
+
+        if (entity.isPresent()) {
+            movieReviewDTO.setMovie(movieMapper.toResponseDTO(entity.get()));
+            movieReviewDTO.setReviews(entity.get().getReviews().stream().map(reviewMapper::toDTO).toList());
+            return Optional.of(movieReviewDTO);
+        }
+
+        return Optional.empty();
     }
 
     @Override

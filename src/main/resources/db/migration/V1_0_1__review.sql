@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS review (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    author VARCHAR(255) NOT NULL,
+    content VARCHAR(255) NOT NULL,
+    rating SMALLINT CHECK (rating >= 1 AND rating <= 10),
+    movie_id BIGINT REFERENCES movie(id)
+);

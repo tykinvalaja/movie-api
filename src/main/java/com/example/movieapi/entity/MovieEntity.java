@@ -3,9 +3,11 @@ package com.example.movieapi.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -19,4 +21,7 @@ public class MovieEntity {
     private int releaseYear;
     private String director;
     private double rating;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ReviewEntity> reviews = new HashSet<>();
 }
