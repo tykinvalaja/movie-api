@@ -7,7 +7,7 @@ import com.example.movieapi.mapper.ReviewMapper;
 import com.example.movieapi.model.MovieRequestDTO;
 import com.example.movieapi.model.MovieResponseDTO;
 import com.example.movieapi.model.MovieReviewDTO;
-import com.example.movieapi.model.ReviewDTO;
+import com.example.movieapi.model.ReviewResponseDTO;
 import com.example.movieapi.repository.MovieRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,17 +58,17 @@ class MovieServiceImplTest {
         movieEntity.setReviews(Set.of(reviewEntity));
 
         MovieResponseDTO movieResponseDTO = new MovieResponseDTO(7L, "The Matrix", "Sci-Fi", 1999, "Wachowski", 8.7);
-        ReviewDTO reviewDTO = new ReviewDTO("John", "Great", 9, 7L);
+        ReviewResponseDTO reviewResponseDTO = new ReviewResponseDTO("John", "Great", 9, 7L);
 
         when(movieRepository.findById(7L)).thenReturn(Optional.of(movieEntity));
         when(movieMapper.toResponseDTO(movieEntity)).thenReturn(movieResponseDTO);
-        when(reviewMapper.toDTO(reviewEntity)).thenReturn(reviewDTO);
+        when(reviewMapper.toDTO(reviewEntity)).thenReturn(reviewResponseDTO);
 
         Optional<MovieReviewDTO> result = movieService.getMovie(7L);
 
         assertThat(result).isPresent();
         assertThat(result.get().getMovie()).isEqualTo(movieResponseDTO);
-        assertThat(result.get().getReviews()).containsExactly(reviewDTO);
+        assertThat(result.get().getReviews()).containsExactly(reviewResponseDTO);
     }
 
     @Test

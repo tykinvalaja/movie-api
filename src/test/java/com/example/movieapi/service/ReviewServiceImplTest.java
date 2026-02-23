@@ -3,7 +3,8 @@ package com.example.movieapi.service;
 import com.example.movieapi.entity.MovieEntity;
 import com.example.movieapi.entity.ReviewEntity;
 import com.example.movieapi.mapper.ReviewMapper;
-import com.example.movieapi.model.ReviewDTO;
+import com.example.movieapi.model.ReviewResponseDTO;
+import com.example.movieapi.model.ReviewRequestDTO;
 import com.example.movieapi.repository.MovieRepository;
 import com.example.movieapi.repository.ReviewRepository;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ class ReviewServiceImplTest {
 
     @Test
     void addReviewSavesReviewWhenMovieExists() {
-        ReviewDTO input = new ReviewDTO("Alice", "Nice", 8, 4L);
+        ReviewRequestDTO input = new ReviewRequestDTO("Alice", "Nice", 8);
         MovieEntity movie = new MovieEntity();
         movie.setId(4L);
 
@@ -49,14 +50,14 @@ class ReviewServiceImplTest {
         ReviewEntity saved = new ReviewEntity();
         saved.setMovie(movie);
 
-        ReviewDTO output = new ReviewDTO("Alice", "Nice", 8, 4L);
+        ReviewResponseDTO output = new ReviewResponseDTO("Alice", "Nice", 8, 4L);
 
         when(movieRepository.findById(4L)).thenReturn(Optional.of(movie));
         when(reviewMapper.toEntity(input)).thenReturn(reviewEntity);
         when(reviewRepository.save(reviewEntity)).thenReturn(saved);
         when(reviewMapper.toDTO(saved)).thenReturn(output);
 
-        ReviewDTO result = reviewService.addReview(input);
+        ReviewResponseDTO result = reviewService.addReview(input, 4L);
 
         assertThat(result).isEqualTo(output);
 
@@ -67,10 +68,10 @@ class ReviewServiceImplTest {
 
     @Test
     void addReviewThrowsNotFoundWhenMovieMissing() {
-        ReviewDTO input = new ReviewDTO("Alice", "Nice", 8, 99L);
+        ReviewRequestDTO input = new ReviewRequestDTO("Alice", "Nice", 8);
         when(movieRepository.findById(99L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> reviewService.addReview(input))
+        assertThatThrownBy(() -> reviewService.addReview(input, 99L))
                 .isInstanceOf(ResponseStatusException.class)
                 .satisfies(ex -> {
                     ResponseStatusException responseStatusException = (ResponseStatusException) ex;

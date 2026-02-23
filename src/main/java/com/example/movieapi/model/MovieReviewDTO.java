@@ -13,5 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 public class MovieReviewDTO {
     private MovieResponseDTO movie;
-    private List<ReviewDTO> reviews;
+    private List<ReviewResponseDTO> reviews;
 }

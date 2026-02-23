@@ -1,7 +1,8 @@
 package com.example.movieapi.service;
 
-import com.example.movieapi.model.ReviewDTO;
+import com.example.movieapi.model.ReviewResponseDTO;
+import com.example.movieapi.model.ReviewRequestDTO;
 
 public interface ReviewService {
-    ReviewDTO addReview(ReviewDTO reviewDTO);
+    ReviewResponseDTO addReview(ReviewRequestDTO reviewDTO, long id);
 }

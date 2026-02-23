@@ -1,12 +1,11 @@
 package com.example.movieapi.controller;
 
 
-import com.example.movieapi.model.MovieReviewDTO;
+import com.example.movieapi.model.*;
+import com.example.movieapi.service.ReviewServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import com.example.movieapi.model.MovieRequestDTO;
-import com.example.movieapi.model.MovieResponseDTO;
 import com.example.movieapi.service.MovieServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +26,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Tag(name = "Movies", description = "Movie catalog endpoints")
 public class MovieController {
     private final MovieServiceImpl movieService;
+    private final ReviewServiceImpl reviewService;
 
     @GetMapping
     @Operation(
@@ -113,6 +113,18 @@ public class MovieController {
     public ResponseEntity<String> deleteMovie(
             @PathVariable Long id) {
         movieService.deleteMovie(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Movie");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Movie deleted");
+    }
+
+    @PostMapping("/{id}/review")
+    @Operation(
+            summary = "Add a review",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Review added"),
+                    @ApiResponse(responseCode = "404", description = "Movie not found")
+            }
+    )
+    public ResponseEntity<ReviewResponseDTO> addReview(ReviewRequestDTO reviewDTO, @PathVariable long id) {
+        return ResponseEntity.status(CREATED).body(reviewService.addReview(reviewDTO, id));
     }
 }
