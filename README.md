@@ -1,6 +1,6 @@
 # Movie-API
 
-![movie-api](https://github.com/tykinvalaja/movie-api/blob/main/documentation/Screenshot%202026-02-22%20at%2011.12.04.png)
+![movie-api](https://github.com/tykinvalaja/movie-api/blob/main/documentation/api.png)
 
 # Docker
 
