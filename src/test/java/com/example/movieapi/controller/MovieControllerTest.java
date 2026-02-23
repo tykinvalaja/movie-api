@@ -3,8 +3,9 @@ package com.example.movieapi.controller;
 import com.example.movieapi.model.MovieRequestDTO;
 import com.example.movieapi.model.MovieResponseDTO;
 import com.example.movieapi.model.MovieReviewDTO;
-import com.example.movieapi.model.ReviewDTO;
+import com.example.movieapi.model.ReviewResponseDTO;
 import com.example.movieapi.service.MovieServiceImpl;
+import com.example.movieapi.service.ReviewServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,13 +43,16 @@ class MovieControllerTest {
     @Mock
     private MovieServiceImpl movieService;
 
+    @Mock
+    private ReviewServiceImpl reviewService;
+
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
-        mockMvc = MockMvcBuilders.standaloneSetup(new MovieController(movieService)).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new MovieController(movieService, reviewService)).build();
     }
 
     @Test
@@ -78,7 +82,7 @@ class MovieControllerTest {
     @Test
     void getMovieReturnsMovieWhenFound() throws Exception {
         MovieResponseDTO movie = new MovieResponseDTO(5L, "Inception", "Sci-Fi", 2010, "Nolan", 8.8);
-        ReviewDTO review = new ReviewDTO("John", "Great", 9, 5L);
+        ReviewResponseDTO review = new ReviewResponseDTO("John", "Great", 9, 5L);
         when(movieService.getMovie(5L)).thenReturn(Optional.of(new MovieReviewDTO(movie, List.of(review))));
 
         mockMvc.perform(get("/movies/5"))

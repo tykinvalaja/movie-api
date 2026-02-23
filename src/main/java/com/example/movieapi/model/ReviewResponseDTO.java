@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewDTO {
+public class ReviewResponseDTO {
     @Schema(description = "Review author", example = "John")
     private String author;
     @Schema(description = "Review text", example = "Great movie")
